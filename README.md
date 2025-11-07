@@ -1,5 +1,7 @@
 
-# LIC Calculator
+# LIC Calculator – Premium, Maturity & Surrender Value Online
+[![Live Demo](https://img.shields.io/badge/Demo-Live%20Demo-brightgreen)](https://liccalculator.info/)
+<table><tr><td> <img src="https://liccalculator.info/wp-content/uploads/2025/11/LIC-Calculator-1.webp" alt="LIC Calculator Screenshot"></td><td></table>
 
 LIC Calculator is an online tool that helps users calculate maturity benefits, bonus values, and premium details for various Life Insurance Corporation (LIC) of India plans. This project aims to provide an accurate, user-friendly, and responsive web-based solution for LIC policyholders and agents to easily estimate returns on their insurance investments.
 
@@ -16,7 +18,7 @@ Each calculator is designed using lightweight HTML, CSS, and JavaScript for fast
 ### 🧮 Features
 
 - Responsive single-page design  
-- Simple and clean white background with theme color #00417C  
+- Simple and clean white background
 - Plan-wise premium and benefit calculations  
 - Bonus integration based on official LIC data  
 - Free access, no login required  
@@ -49,4 +51,5 @@ Feel free to fork the repository and submit pull requests to contribute to ongoi
 
 For feedback or queries, please visit:  
 [https://liccalculator.info/](https://liccalculator.info/)
+Email : contact@liccalculator.info
 
