@@ -1,7 +1,3 @@
-# lic-calculator
-Here’s a professional and SEO-friendly GitHub README draft for your LIC Calculator project.  
-
-***
 
 # LIC Calculator
 
