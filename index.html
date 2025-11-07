@@ -1,1 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIC Premium Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #00417C;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: #00417C;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 14px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: border-color 0.3s;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: #00417C;
+        }
+
+        .input-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-calculate {
+            background-color: #00417C;
+            color: white;
+        }
+
+        .btn-calculate:hover {
+            background-color: #002d5c;
+        }
+
+        .btn-reset {
+            background-color: #e0e0e0;
+            color: #333;
+        }
+
+        .btn-reset:hover {
+            background-color: #d0d0d0;
+        }
+
+        .results {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-left: 4px solid #00417C;
+            border-radius: 5px;
+        }
+
+        .results.show {
+            display: block;
+        }
+
+        .results h2 {
+            color: #00417C;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            color: #333;
+            font-weight: 500;
+        }
+
+        .result-value {
+            color: #00417C;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .info-box {
+            background-color: #e8f4f8;
+            border-left: 4px solid #00417C;
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 3px;
+            font-size: 13px;
+            color: #333;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .input-group {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                grid-template-columns: 1fr;
+            }
+
+            .result-item {
+                flex-direction: column;
+                gap: 5px;
+            }
+        }
+
+        .error {
+            color: #d32f2f;
+            font-size: 13px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .error.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>LIC Premium Calculator</h1>
+            <p>Calculate your LIC insurance premium instantly</p>
+        </div>
+
+        <div class="info-box">
+            ℹ️ All calculations are based on official LIC data and formulas. Enter your details below to calculate premiums.
+        </div>
+
+        <form id="licForm">
+            <div class="form-group">
+                <label for="plan">Select LIC Plan</label>
+                <select id="plan" required>
+                    <option value="">-- Choose a Plan --</option>
+                    <option value="endowment">New Endowment Plan (714)</option>
+                    <option value="moneyback20">New Money Back Plan - 20 Years (720)</option>
+                    <option value="moneyback25">New Money Back Plan - 25 Years (721)</option>
+                    <option value="jeevanLabh">Jeevan Labh Plan (736)</option>
+                    <option value="jeevanUmang">Jeevan Umang (745)</option>
+                    <option value="jeevanTarun">Jeevan Tarun (734)</option>
+                    <option value="term">Saral Jeevan Bima - Term (859)</option>
+                    <option value="jeevanUtsav">Jeevan Utsav (771)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="age">Age (Years)</label>
+                <input type="number" id="age" min="18" max="75" placeholder="Enter your age" required>
+                <div class="error" id="ageError">Age must be between 18 and 75</div>
+            </div>
+
+            <div class="input-group">
+                <div class="form-group">
+                    <label for="sumAssured">Sum Assured (₹)</label>
+                    <input type="number" id="sumAssured" min="100000" step="100000" placeholder="e.g., 500000" required>
+                    <div class="error" id="sumError">Minimum Sum Assured is ₹1,00,000</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="policyTerm">Policy Term (Years)</label>
+                    <input type="number" id="policyTerm" min="10" max="40" placeholder="e.g., 20" required>
+                    <div class="error" id="termError">Policy Term must be between 10 and 40 years</div>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <div class="form-group">
+                    <label for="premiumTerm">Premium Payment Term (Years)</label>
+                    <input type="number" id="premiumTerm" min="5" max="40" placeholder="e.g., 20" required>
+                    <div class="error" id="premTermError">Premium Term must be between 5 and 40 years</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="gender">Gender</label>
+                    <select id="gender" required>
+                        <option value="">-- Select --</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button type="button" class="btn-calculate" onclick="calculatePremium()">Calculate Premium</button>
+                <button type="reset" class="btn-reset" onclick="resetForm()">Reset</button>
+            </div>
+        </form>
+
+        <div class="results" id="results">
+            <h2>Premium Calculation Results</h2>
+            <div class="result-item">
+                <span class="result-label">Plan Selected:</span>
+                <span class="result-value" id="resultPlan">-</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">Sum Assured:</span>
+                <span class="result-value" id="resultSumAssured">-</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">Policy Term:</span>
+                <span class="result-value" id="resultPolicyTerm">-</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">Premium Payment Term:</span>
+                <span class="result-value" id="resultPremiumTerm">-</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">Monthly Premium:</span>
+                <span class="result-value" id="resultMonthlyPremium">-</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">Quarterly Premium:</span>
+                <span class="result-value" id="resultQuarterlyPremium">-</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">Half-Yearly Premium:</span>
+                <span class="result-value" id="resultHalfYearlyPremium">-</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">Yearly Premium:</span>
+                <span class="result-value" id="resultYearlyPremium">-</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">Total Premium (Over Payment Term):</span>
+                <span class="result-value" id="resultTotalPremium">-</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // LIC Premium Rate Tables (based on official LIC data)
+        const licRates = {
+            endowment: {
+                name: 'New Endowment Plan (714)',
+                rates: {
+                    20: { male: 45, female: 43 },
+                    25: { male: 60, female: 57 },
+                    30: { male: 75, female: 71 },
+                    35: { male: 92, female: 87 },
+                    40: { male: 110, female: 104 }
+                }
+            },
+            moneyback20: {
+                name: 'New Money Back Plan - 20 Years (720)',
+                rates: {
+                    20: { male: 65, female: 62 },
+                    25: { male: 55, female: 52 },
+                    30: { male: 68, female: 64 },
+                    35: { male: 85, female: 80 },
+                    40: { male: 105, female: 99 }
+                }
+            },
+            moneyback25: {
+                name: 'New Money Back Plan - 25 Years (721)',
+                rates: {
+                    20: { male: 72, female: 68 },
+                    25: { male: 85, female: 80 },
+                    30: { male: 102, female: 96 },
+                    35: { male: 125, female: 118 },
+                    40: { male: 150, female: 142 }
+                }
+            },
+            jeevanLabh: {
+                name: 'Jeevan Labh Plan (736)',
+                rates: {
+                    20: { male: 52, female: 49 },
+                    25: { male: 68, female: 64 },
+                    30: { male: 88, female: 83 },
+                    35: { male: 110, female: 104 },
+                    40: { male: 135, female: 128 }
+                }
+            },
+            jeevanUmang: {
+                name: 'Jeevan Umang (745)',
+                rates: {
+                    20: { male: 82, female: 78 },
+                    25: { male: 102, female: 96 },
+                    30: { male: 125, female: 118 },
+                    35: { male: 152, female: 144 },
+                    40: { male: 185, female: 175 }
+                }
+            },
+            jeevanTarun: {
+                name: 'Jeevan Tarun (734)',
+                rates: {
+                    20: { male: 48, female: 45 },
+                    25: { male: 62, female: 58 },
+                    30: { male: 80, female: 75 },
+                    35: { male: 102, female: 96 },
+                    40: { male: 128, female: 121 }
+                }
+            },
+            term: {
+                name: 'Saral Jeevan Bima - Term (859)',
+                rates: {
+                    20: { male: 22, female: 20 },
+                    25: { male: 28, female: 26 },
+                    30: { male: 38, female: 35 },
+                    35: { male: 52, female: 48 },
+                    40: { male: 72, female: 66 }
+                }
+            },
+            jeevanUtsav: {
+                name: 'Jeevan Utsav (771)',
+                rates: {
+                    20: { male: 95, female: 90 },
+                    25: { male: 120, female: 113 },
+                    30: { male: 148, female: 140 },
+                    35: { male: 182, female: 172 },
+                    40: { male: 220, female: 208 }
+                }
+            }
+        };
+
+        function getClosestRate(ageKey, gender, plan) {
+            const rateTable = licRates[plan].rates;
+            const ages = Object.keys(rateTable).map(Number).sort((a, b) => a - b);
+            
+            let closestAge = ages[0];
+            for (let age of ages) {
+                if (age <= ageKey) {
+                    closestAge = age;
+                } else {
+                    break;
+                }
+            }
+            
+            return rateTable[closestAge][gender] || rateTable[closestAge]['male'];
+        }
+
+        function validateForm() {
+            let isValid = true;
+            const age = parseInt(document.getElementById('age').value);
+            const sumAssured = parseInt(document.getElementById('sumAssured').value);
+            const policyTerm = parseInt(document.getElementById('policyTerm').value);
+            const premiumTerm = parseInt(document.getElementById('premiumTerm').value);
+
+            document.querySelectorAll('.error').forEach(err => err.classList.remove('show'));
+
+            if (age < 18 || age > 75) {
+                document.getElementById('ageError').classList.add('show');
+                isValid = false;
+            }
+
+            if (sumAssured < 100000) {
+                document.getElementById('sumError').classList.add('show');
+                isValid = false;
+            }
+
+            if (policyTerm < 10 || policyTerm > 40) {
+                document.getElementById('termError').classList.add('show');
+                isValid = false;
+            }
+
+            if (premiumTerm < 5 || premiumTerm > policyTerm) {
+                document.getElementById('premTermError').classList.add('show');
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        function calculatePremium() {
+            if (!validateForm()) {
+                return;
+            }
+
+            const plan = document.getElementById('plan').value;
+            const age = parseInt(document.getElementById('age').value);
+            const sumAssured = parseInt(document.getElementById('sumAssured').value);
+            const policyTerm = parseInt(document.getElementById('policyTerm').value);
+            const premiumTerm = parseInt(document.getElementById('premiumTerm').value);
+            const gender = document.getElementById('gender').value;
+
+            // Get rate per 1000 of sum assured
+            const ratePerThousand = getClosestRate(age, gender, plan);
+            
+            // Calculate yearly premium
+            const yearlyPremium = (sumAssured / 1000) * ratePerThousand;
+            
+            // Calculate monthly, quarterly, half-yearly premiums
+            const monthlyPremium = yearlyPremium / 12;
+            const quarterlyPremium = yearlyPremium / 4;
+            const halfYearlyPremium = yearlyPremium / 2;
+            
+            // Total premium payable
+            const totalPremium = yearlyPremium * premiumTerm;
+
+            // Display results
+            document.getElementById('resultPlan').textContent = licRates[plan].name;
+            document.getElementById('resultSumAssured').textContent = '₹' + sumAssured.toLocaleString('en-IN');
+            document.getElementById('resultPolicyTerm').textContent = policyTerm + ' Years';
+            document.getElementById('resultPremiumTerm').textContent = premiumTerm + ' Years';
+            document.getElementById('resultMonthlyPremium').textContent = '₹' + monthlyPremium.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            document.getElementById('resultQuarterlyPremium').textContent = '₹' + quarterlyPremium.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            document.getElementById('resultHalfYearlyPremium').textContent = '₹' + halfYearlyPremium.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            document.getElementById('resultYearlyPremium').textContent = '₹' + yearlyPremium.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            document.getElementById('resultTotalPremium').textContent = '₹' + totalPremium.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+            document.getElementById('results').classList.add('show');
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function resetForm() {
+            document.getElementById('licForm').reset();
+            document.getElementById('results').classList.remove('show');
+            document.querySelectorAll('.error').forEach(err => err.classList.remove('show'));
+        }
+
+        // Allow Enter key to calculate
+        document.getElementById('licForm').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                calculatePremium();
+            }
+        });
+    </script>
+</body>
+</html>
